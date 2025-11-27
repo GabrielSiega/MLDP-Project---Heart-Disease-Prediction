@@ -1,23 +1,21 @@
-# Use official Python base image
-FROM python:3.10-slim
+# Use Miniconda base image
+FROM continuumio/miniconda3:latest
 
 # Set working directory
 WORKDIR /app
 
-# Copy dependency list
-COPY requirements.txt .
+# Copy environment.yml if you have one
+COPY environment.yml .
 
-# Install dependencies
-RUN pip install --no-cache-dir -r requirements.txt
+# Install packages directly into base environment to avoid prefix issues
+RUN conda install -y python=3.10 pandas numpy matplotlib seaborn scikit-learn plotly notebook \
+    && pip install yellowbrick
 
-# Install Jupyter
-RUN pip install jupyter
-
-# Copy the rest of the project files
+# Copy your project notebooks and files
 COPY . .
 
-# Expose Jupyter Notebook port
+# Expose port for Jupyter
 EXPOSE 8888
 
 # Start Jupyter Notebook
-CMD ["jupyter", "notebook", "--ip=0.0.0.0", "--allow-root", "--no-browser"]
+CMD ["jupyter", "notebook", "--ip=0.0.0.0", "--port=8888", "--no-browser", "--allow-root", "--NotebookApp.token=''"]

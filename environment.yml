@@ -1,0 +1,13 @@
+name: mldp
+dependencies:
+  - python=3.10
+  - pandas
+  - numpy
+  - matplotlib
+  - seaborn
+  - scikit-learn
+  - plotly
+  - notebook
+  - pip
+  - pip:
+      - yellowbrick
