@@ -1,0 +1,68 @@
+Failure # 1 (occurred at 2026-01-07_13-38-33)
+[36mray::ImplicitFunc.train()[39m (pid=45548, ip=127.0.0.1, actor_id=ea581c7fe095f300b8ebf08701000000, repr=train_model)
+  File "python\\ray\\_raylet.pyx", line 1722, in ray._raylet.execute_task
+  File "python\\ray\\_raylet.pyx", line 1665, in ray._raylet.execute_task.function_executor
+  File "c:\Users\gabri\anaconda3\envs\mldp\Lib\site-packages\ray\_private\function_manager.py", line 693, in actor_method_executor
+    return method(__ray_actor, *args, **kwargs)
+  File "c:\Users\gabri\anaconda3\envs\mldp\Lib\site-packages\ray\util\tracing\tracing_helper.py", line 461, in _resume_span
+    return method(self, *_args, **_kwargs)
+  File "c:\Users\gabri\anaconda3\envs\mldp\Lib\site-packages\ray\tune\trainable\trainable.py", line 331, in train
+    raise skipped from exception_cause(skipped)
+  File "c:\Users\gabri\anaconda3\envs\mldp\Lib\site-packages\ray\air\_internal\util.py", line 98, in run
+    self._ret = self._target(*self._args, **self._kwargs)
+                ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\gabri\anaconda3\envs\mldp\Lib\site-packages\ray\tune\trainable\function_trainable.py", line 44, in <lambda>
+    training_func=lambda: self._trainable_func(self.config),
+                          ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "c:\Users\gabri\anaconda3\envs\mldp\Lib\site-packages\ray\util\tracing\tracing_helper.py", line 461, in _resume_span
+    return method(self, *_args, **_kwargs)
+  File "c:\Users\gabri\anaconda3\envs\mldp\Lib\site-packages\ray\tune\trainable\function_trainable.py", line 249, in _trainable_func
+    output = fn()
+  File "C:\Users\gabri\AppData\Local\Temp\ipykernel_20556\673155727.py", line 20, in train_model
+  File "c:\Users\gabri\anaconda3\envs\mldp\Lib\site-packages\sklearn\base.py", line 1365, in wrapper
+    return fit_method(estimator, *args, **kwargs)
+  File "c:\Users\gabri\anaconda3\envs\mldp\Lib\site-packages\sklearn\ensemble\_gb.py", line 658, in fit
+    X, y = validate_data(
+           ~~~~~~~~~~~~~^
+        self,
+        ^^^^^
+    ...<4 lines>...
+        multi_output=True,
+        ^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "c:\Users\gabri\anaconda3\envs\mldp\Lib\site-packages\sklearn\utils\validation.py", line 2971, in validate_data
+    X, y = check_X_y(X, y, **check_params)
+           ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\gabri\anaconda3\envs\mldp\Lib\site-packages\sklearn\utils\validation.py", line 1368, in check_X_y
+    X = check_array(
+        X,
+    ...<12 lines>...
+        input_name="X",
+    )
+  File "c:\Users\gabri\anaconda3\envs\mldp\Lib\site-packages\sklearn\utils\validation.py", line 971, in check_array
+    array = array.astype(new_dtype)
+  File "c:\Users\gabri\anaconda3\envs\mldp\Lib\site-packages\pandas\core\generic.py", line 6665, in astype
+    new_data = self._mgr.astype(dtype=dtype, copy=copy, errors=errors)
+  File "c:\Users\gabri\anaconda3\envs\mldp\Lib\site-packages\pandas\core\internals\managers.py", line 449, in astype
+    return self.apply(
+           ~~~~~~~~~~^
+        "astype",
+        ^^^^^^^^^
+    ...<3 lines>...
+        using_cow=using_copy_on_write(),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "c:\Users\gabri\anaconda3\envs\mldp\Lib\site-packages\pandas\core\internals\managers.py", line 363, in apply
+    applied = getattr(b, f)(**kwargs)
+  File "c:\Users\gabri\anaconda3\envs\mldp\Lib\site-packages\pandas\core\internals\blocks.py", line 784, in astype
+    new_values = astype_array_safe(values, dtype, copy=copy, errors=errors)
+  File "c:\Users\gabri\anaconda3\envs\mldp\Lib\site-packages\pandas\core\dtypes\astype.py", line 237, in astype_array_safe
+    new_values = astype_array(values, dtype, copy=copy)
+  File "c:\Users\gabri\anaconda3\envs\mldp\Lib\site-packages\pandas\core\dtypes\astype.py", line 182, in astype_array
+    values = _astype_nansafe(values, dtype, copy=copy)
+  File "c:\Users\gabri\anaconda3\envs\mldp\Lib\site-packages\pandas\core\dtypes\astype.py", line 133, in _astype_nansafe
+    return arr.astype(dtype, copy=True)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+ValueError: could not convert string to float: 'Female'
