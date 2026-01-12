@@ -1,4 +1,7 @@
 # MLDP-Project---Heart-Disease-Prediction
+
+![Logo](images/Heart-Disease.jpg)
+
 This project predicts heart disease risk using the UCI Heart Disease dataset. Machine learning models analyze clinical features to identify early signs of heart disease and support improved preventive healthcare decisions.
 
 Cardiovascular disease remains one of the leading causes of mortality in Singapore, and early detection plays a crucial role in reducing health risks and improving patient outcomes. However, developing predictive healthcare models in Singapore is challenging because patient-level medical records are not publicly accessible due to privacy and data protection regulations.
