@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Heart Disease Severity Predictor</title>
+</head>
+<body>
+    <h2>Enter Patient Data</h2>
+    <form action="/predict" method="post">
+        <label>Age (years):</label><input type="text" name="num__age_years"><br>
+        <label>Resting BP (mmHg):</label><input type="text" name="num__resting_bp_mmHg"><br>
+        <label>Serum Cholesterol (mg/dl):</label><input type="text" name="num__serum_cholesterol_mgdl"><br>
+        <label>Chest Pain Type:</label>
+        <select name="cat__chest_pain_type_asymptomatic">
+            <option value="1">Asymptomatic</option>
+            <option value="0">Other</option>
+        </select><br>
+        <!-- Add more fields for your features -->
+        <input type="submit" value="Predict">
+    </form>
+</body>
+</html>
