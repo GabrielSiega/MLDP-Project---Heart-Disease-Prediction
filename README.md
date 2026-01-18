@@ -11,3 +11,13 @@ To address this challenge, this project presents a machine learning–based hear
 The goal of this project is to demonstrate a proof-of-concept AI solution that can support early heart disease screening in Singapore. Using supervised classification techniques from scikit-learn, the model is trained to predict whether a patient is likely to have heart disease. This prototype is deployed as an interactive Streamlit web application, allowing users to input medical parameters and instantly view risk predictions.
 
 In a future deployment phase, this prototype can be retrained and fine-tuned using anonymised, locally sourced patient data through partnerships with Singapore healthcare institutions. This positions the solution as a scalable foundation for AI-assisted cardiovascular risk screening within Singapore’s hospitals and polyclinics.
+
+
+---
+
+## Installation
+
+Clone the repository:
+```bash
+git clone https://github.com/yourusername/MLDP-Project---Heart-Disease-Prediction.git
+cd MLDP-Project---Heart-Disease-Prediction
