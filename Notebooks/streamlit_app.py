@@ -5,25 +5,23 @@ import joblib
 # -------------------------
 # Load trained model
 # -------------------------
-MODEL_PATH = r"D:\MLDP Project\Notebooks\Models\heart_disease_rf_v1.pkl"
-
-# Attempt to load the model
-try:
-    model = joblib.load(MODEL_PATH)
-except Exception as e:
-    st.error(f"Error loading model: {e}")
+model_path = r"D:\MLDP Project\Notebooks\Models\heart_disease_rf_v1.pkl"
+model = joblib.load(model_path)   # load the actual model object
 
 # -------------------------
-# Feature columns (FROM CLEANED TRAINING)
-# ⚠️ Updated to include ONLY the numeric columns from your list
+# Define ALL categorical levels
 # -------------------------
-FEATURE_COLUMNS = [
-    "age_years",
-    "resting_bp_mmHg",
-    "serum_cholesterol_mgdl",
-    "thalch",
-    "st_depression_exercise",
-    "num_major_vessels"
+CHEST_PAIN_CATEGORIES = [
+    "typical angina",
+    "atypical angina",
+    "non-anginal",
+    "asymptomatic"
+]
+
+THAL_DEFECT_CATEGORIES = [
+    "normal",
+    "fixed defect",
+    "reversable defect"
 ]
 
 # -------------------------
@@ -32,55 +30,59 @@ FEATURE_COLUMNS = [
 st.set_page_config(page_title="Heart Disease Severity Predictor")
 
 st.title("❤️ Heart Disease Severity Prediction")
-st.write("Enter patient clinical information below:")
+st.write("Enter patient information below:")
 
-# Layout for inputs
+# Numeric inputs
+thalch = st.number_input("Max Heart Rate Achieved (thalch)", 60, 220, 120)
+num_major_vessels = st.selectbox("Number of Major Vessels", [0, 1, 2, 3])
+st_depression_exercise = st.number_input("ST Depression (Exercise)", 0.0, 10.0, 2.5)
+age_years = st.number_input("Age (Years)", 1, 120, 68)
+serum_cholesterol_mgdl = st.number_input("Serum Cholesterol (mg/dl)", 100, 600, 240)
+resting_bp_mmHg = st.number_input("Resting Blood Pressure (mmHg)", 80, 250, 180)
+
+# Place categorical choices side by side
 col1, col2 = st.columns(2)
 
 with col1:
-    age_years = st.number_input("Age (Years)", 1, 120, 50)
-    resting_bp_mmHg = st.number_input("Resting Blood Pressure (mmHg)", 80, 250, 120)
-    serum_cholesterol_mgdl = st.number_input("Serum Cholesterol (mg/dl)", 100, 600, 200)
+    chest_pain_type = st.selectbox("Chest Pain Type", CHEST_PAIN_CATEGORIES)
 
 with col2:
-    thalch = st.number_input("Max Heart Rate Achieved (thalch)", 60, 220, 150)
-    st_depression_exercise = st.number_input("ST Depression (Exercise)", 0.0, 10.0, 1.0, step=0.1)
-    num_major_vessels = st.selectbox("Number of Major Vessels", [0, 1, 2, 3])
+    thal_defect_type = st.selectbox("Thal Defect Type", THAL_DEFECT_CATEGORIES)
 
 # -------------------------
 # Prediction logic
 # -------------------------
 if st.button("Predict Severity"):
-    # Create DataFrame with only the selected 6 features
     new_patient = pd.DataFrame([{
-        "age_years": age_years,
-        "resting_bp_mmHg": resting_bp_mmHg,
-        "serum_cholesterol_mgdl": serum_cholesterol_mgdl,
         "thalch": thalch,
+        "num_major_vessels": num_major_vessels,
         "st_depression_exercise": st_depression_exercise,
-        "num_major_vessels": num_major_vessels
+        "age_years": age_years,
+        "serum_cholesterol_mgdl": serum_cholesterol_mgdl,
+        "resting_bp_mmHg": resting_bp_mmHg,
+        "chest_pain_type": chest_pain_type,
+        "thal_defect_type": thal_defect_type
     }])
 
-    # Align with training feature space (ensure column order is correct)
-    new_patient_final = new_patient.reindex(
-        columns=FEATURE_COLUMNS,
+    # 🔒 Force categorical consistency
+    new_patient["chest_pain_type"] = pd.Categorical(
+        new_patient["chest_pain_type"],
+        categories=CHEST_PAIN_CATEGORIES
+    )
+    new_patient["thal_defect_type"] = pd.Categorical(
+        new_patient["thal_defect_type"],
+        categories=THAL_DEFECT_CATEGORIES
+    )
+
+    # One-hot encode WITHOUT dropping columns
+    new_patient_encoded = pd.get_dummies(new_patient)
+
+    # Align with training feature space using model.feature_names_in_
+    new_patient_encoded = new_patient_encoded.reindex(
+        columns=model.feature_names_in_,
         fill_value=0
     )
 
     # Predict
-    try:
-        prediction = model.predict(new_patient_final)[0]
-        
-        # UI Styling based on result
-        st.divider()
-        if prediction == "Normal":
-            st.success(f"Predicted Heart Disease Severity: **{prediction}**")
-        else:
-            st.warning(f"Predicted Heart Disease Severity: **{prediction}**")
-            
-    except NameError:
-        st.error("Model is not loaded. Please check the file path.")
-    except Exception as e:
-        st.error(f"Prediction error: {e}")
-
-st.info("Note: This app is now configured to use only numeric clinical markers for prediction.")
+    prediction = model.predict(new_patient_encoded)[0]
+    st.success(f"Predicted Heart Disease Severity: **{prediction}**")
